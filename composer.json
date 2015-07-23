@@ -1,0 +1,23 @@
+{
+    "name": "bobdenotter/chart",
+    "description": "An extension to insert Chart.js graphs and charts in our pages.",
+    "type": "bolt-extension",
+    "require": {
+        "bolt/bolt": ">=2.2.0,<3.0.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bob den Otter",
+            "email": "bob@twokings.nl"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "init.php"
+        ],
+        "psr-4": {
+            "Bolt\\Extension\\Bobdenotter\\Graph\\": ""
+        }
+    }
+}
