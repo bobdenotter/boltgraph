@@ -60,10 +60,14 @@ class Extension extends BaseExtension
                 $template = 'line.twig';
                 break;
 
+            case "pie":
+            case "doughnut":
+                $template = 'pie.twig';
+                break;
+
         }
 
-
-        $chart = $this->app['render']->render('line.twig', $twigvars);
+        $chart = $this->app['render']->render($template, $twigvars);
 
         return new \Twig_Markup($chart, 'utf-8');
 

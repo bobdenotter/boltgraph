@@ -1,0 +1,61 @@
+    <div class="boltchart">
+        <div id="legend-{{id}}"></div>
+        <canvas id="chart-{{id}}" height="{{ 3 * chart.height|default(100) }}" width="300"></canvas>
+    </div>
+
+
+    {% set data = chart.grid|json_decode %}
+
+    <button id="button-{{id}}" onclick="$('#button-{{id}}').hide();$('#table-{{id}}').show();">Show data</button>
+
+    <table class="boltcharttable" id="table-{{id}}">{% spaceless %}
+{% for row in chart.grid|json_decode %}
+    {% if loop.first %}
+    <thead>
+    {% elseif loop.index0 == 1 %}
+    <tbody>
+    {% endif %}
+        <tr>
+        {% for cell in row %}
+            {% if loop.first or loop.parent.loop.first %}
+            <th>{{ cell }}</th>
+            {% else %}
+            <td>{{ cell }}</td>
+            {% endif %}
+        {% endfor %}
+        </tr>
+    {% if loop.first %}
+    </thead>
+    {% elseif loop.last %}
+    </tbody>
+    {% endif %}
+{% endfor %}
+
+    {% endspaceless %}</table>
+
+<script>
+    var ChartData{{id}} = [
+{% for dataset in data %}
+    {% set data = dataset|slice(1)|chartsimplode() %}
+    {% if data is not empty %}
+            {
+                label: '{{ dataset|first }}',
+                color : "rgba({{ config.colors[loop.index0][0] }}, {{ config.colors[loop.index0][1] }}, {{ config.colors[loop.index0][2] }}, 1)",
+                highlight : "rgba({{ config.colors[loop.index0][0] }}, {{ config.colors[loop.index0][1] }}, {{ config.colors[loop.index0][2] }}, 1)",
+                value : {{ data }}
+            } {% if not loop.last %},{% endif %}
+    {% endif %}
+{% endfor %}
+        ];
+
+    $(document).ready(function($) {
+        $('#table-{{id}}').hide();
+        var ctx = $("#chart-{{id}}").get(0).getContext("2d");
+        window.myLine = new Chart(ctx).{% if chart.type == "pie" %}Pie{% else %}Doughnut{% endif %}(ChartData{{id}}, {
+            responsive: true
+        });
+        $("#legend-{{id}}").html(window.myLine.generateLegend());
+    });
+
+
+</script>
