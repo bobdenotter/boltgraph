@@ -21,6 +21,11 @@ class Extension extends BaseExtension
         return "chart";
     }
 
+    public function isSafe()
+    {
+        return true;
+    }
+
     public function chart($id = null)
     {
         // $this->addCss('assets/extension.css');
